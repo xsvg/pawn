@@ -29,7 +29,7 @@ public class WxServiceImpl implements WxService
 	public void save(User user)
 	{
 		userRepository.save(user);
-		throw new RuntimeException("save user error");
+		throw new RuntimeException();
 	}
 
 	@Transactional

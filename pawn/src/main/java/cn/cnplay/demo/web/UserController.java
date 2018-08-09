@@ -1,19 +1,16 @@
 package cn.cnplay.demo.web;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.core.Response;
 
-import org.springframework.cloud.client.discovery.DiscoveryClient;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Description;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import cn.cnplay.demo.model.User;
-import cn.cnplay.demo.repository.UserRepository;
-import cn.cnplay.demo.service.WxService;
+import cn.cnplay.demo.service.UserService;
+import cn.cnplay.demo.vo.ResultVo;
 
 /**
  * 微信消息的接收和响应
@@ -22,52 +19,38 @@ import cn.cnplay.demo.service.WxService;
  *
  */
 @RestController
-@RequestMapping(value = "/user")
+@RequestMapping("user")
+@Description("用户")
 public class UserController
 {
-	@Resource
-	private UserRepository userRepository;
-
-	@Resource
-	private DiscoveryClient client;
-
-	@Resource
-	private HttpServletRequest request;
-
-	@Resource
-	private WxService wxService;
-
-	/**
-	 * 接收微信服务器发送的4个参数并返回echostr
-	 * 
-	 * @return
-	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	public Response get(@PathVariable String id)
-	{
-		User user = userRepository.getOne(id);
-		return Response.ok(user).build();
+	
+	@Autowired UserService userService;
+	
+	
+	@RequestMapping(value="add",method=RequestMethod.POST)
+	@Description("添加")
+	public ResultVo<?> add(User user){
+		ResultVo<User> resultVo = userService.add(user);
+		resultVo.setData(null);
+		return resultVo;
 	}
-
-	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-	public Response remove(@PathVariable String id)
-	{
-		User user = userRepository.getOne(id);
-		userRepository.delete(user);
-		return Response.ok(user).build();
+	
+	@RequestMapping(value="update",method=RequestMethod.POST)
+	@Description("更新")
+	public ResultVo<?> update(User user){
+		return userService.update(user);
 	}
-
-	@RequestMapping(method = RequestMethod.POST)
-	public Response post(@RequestBody User user)
-	{
-		wxService.save(user);
-		return Response.ok(user).build();
+	
+	@RequestMapping(value="delete",method=RequestMethod.POST)
+	@Description("删除")
+	public ResultVo<?> delete(String id){
+		return userService.delete(id);
 	}
-
-	@RequestMapping(method = RequestMethod.GET)
-	public Response findAll()
-	{
-		return Response.ok(userRepository.findAll()).build();
+	
+	@RequestMapping(value="pswd",method=RequestMethod.POST)
+	@Description("修改密码")
+	public ResultVo<?> pswd(HttpServletRequest request, String oldPswd,String newPswd){
+		User user = (User)request.getAttribute("currentUser");
+		return userService.updatePswd(user.getId(), oldPswd, newPswd);
 	}
-
 }
