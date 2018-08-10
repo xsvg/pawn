@@ -23,7 +23,7 @@ public class User extends BaseEntity
 	private String address;
 	private String password;
 	@Column(name="user_type")
-	private String userType;
+	private String userType; // admin:管理员,auditor:审批人员,operator:经办人员,:storeman:保管员
 	@ManyToOne(fetch=FetchType.LAZY,targetEntity=Department.class)
 	@JoinColumn(name="dept_id")
 	private Department department;

@@ -35,13 +35,15 @@ public class UserHandleLogInterceptor  extends HandlerInterceptorAdapter  {
 					buffer.append(parentDesc.value()).append("/").append(description.value());
 				}
 				String uri = request.getRequestURI();
+				UserHandleLog handleLog = new UserHandleLog();
 				User user = (User)request.getAttribute("currentUser");
 				
-				UserHandleLog handleLog = new UserHandleLog();
-				if(StringUtils.isBlank(user.getName())){
-					handleLog.setUserNo(user.getUsername());
-				}else{
-					handleLog.setUser(user);
+				if(user!=null){
+					if(StringUtils.isBlank(user.getName())){
+						handleLog.setUserNo(user.getUsername());
+					}else{
+						handleLog.setUser(user);
+					}
 				}
 				handleLog.setRequestUri(uri);
 				handleLog.setRequestDesc(buffer.toString());

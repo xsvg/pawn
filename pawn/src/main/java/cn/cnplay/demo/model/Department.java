@@ -24,7 +24,7 @@ public class Department extends BaseEntity {
 	@Column(name="dept_name")
 	private String deptName;
 	@Column(name="dept_type")
-	private Integer deptType;
+	private Integer deptType; // 1:管理机构,2:网点,3:
 	
 	@ManyToOne(fetch=FetchType.LAZY,targetEntity=Department.class)
 	@JoinColumn(name="parent_id")
