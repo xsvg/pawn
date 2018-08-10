@@ -29,6 +29,9 @@ public class Department extends BaseEntity {
 	@ManyToOne(fetch=FetchType.LAZY,targetEntity=Department.class)
 	@JoinColumn(name="parent_id")
 	private Department parent;
+	@Column(name="deleted")
+	private Boolean deleted;
+	
 	public String getDeptNo() {
 		return deptNo;
 	}
@@ -52,6 +55,12 @@ public class Department extends BaseEntity {
 	}
 	public void setParent(Department parent) {
 		this.parent = parent;
+	}
+	public Boolean getDeleted() {
+		return deleted;
+	}
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 	

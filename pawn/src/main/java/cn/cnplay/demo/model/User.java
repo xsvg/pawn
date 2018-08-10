@@ -29,6 +29,8 @@ public class User extends BaseEntity
 	private Department department;
 	@Column(name="contact_number")
 	private String contactNumber;
+	@Column(name="deleted")
+	private Boolean deleted = false; //是否删除
 
 	public User()
 	{
@@ -95,6 +97,14 @@ public class User extends BaseEntity
 
 	public void setContactNumber(String contactNumber) {
 		this.contactNumber = contactNumber;
+	}
+
+	public Boolean getDeleted() {
+		return deleted;
+	}
+
+	public void setDeleted(Boolean deleted) {
+		this.deleted = deleted;
 	}
 	
 	

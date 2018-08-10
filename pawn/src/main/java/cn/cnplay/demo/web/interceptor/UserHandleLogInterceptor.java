@@ -3,15 +3,21 @@ package cn.cnplay.demo.web.interceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Description;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import cn.cnplay.demo.model.User;
 import cn.cnplay.demo.model.UserHandleLog;
+import cn.cnplay.demo.service.UserHandleLogService;
+import cn.cnplay.demo.utils.IpUtil;
 import cn.cnplay.demo.vo.ResultVo;
 
 public class UserHandleLogInterceptor  extends HandlerInterceptorAdapter  {
+	
+	@Autowired UserHandleLogService logService;
 	
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
@@ -32,18 +38,19 @@ public class UserHandleLogInterceptor  extends HandlerInterceptorAdapter  {
 				User user = (User)request.getAttribute("currentUser");
 				
 				UserHandleLog handleLog = new UserHandleLog();
-				/*if(StringUtils.isBlank(user.getName())){
+				if(StringUtils.isBlank(user.getName())){
 					handleLog.setUserNo(user.getUsername());
 				}else{
 					handleLog.setUser(user);
-				}*/
+				}
 				handleLog.setRequestUri(uri);
 				handleLog.setRequestDesc(buffer.toString());
-				
+				handleLog.setClientIp(IpUtil.getIpAddr(request));
 				ResultVo<?> result =  (ResultVo<?>)request.getAttribute("@ResponseBody");
 				if(result!=null){
 					handleLog.setSuccess(result.isSuccess());
-					handleLog.setMessage(result.getMsg());
+					handleLog.setMessage(result.getMsg()); 
+					logService.addLog(handleLog);
 				}
 			}
 		}

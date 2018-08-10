@@ -24,6 +24,8 @@ public class UserHandleLog extends BaseEntity {
 	private User user;
 	@Column(name="user_no")
 	private String userNo;
+	@Column(name="client_ip")
+	private String clientIp;
 	@Column(name="request_uri")
 	private String requestUri;
 	@Column(name="request_desc")
@@ -44,6 +46,13 @@ public class UserHandleLog extends BaseEntity {
 	}
 	public void setUserNo(String userNo) {
 		this.userNo = userNo;
+	}
+	
+	public String getClientIp() {
+		return clientIp;
+	}
+	public void setClientIp(String clientIp) {
+		this.clientIp = clientIp;
 	}
 	public String getRequestUri() {
 		return requestUri;

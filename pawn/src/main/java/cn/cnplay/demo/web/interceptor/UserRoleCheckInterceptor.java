@@ -20,26 +20,28 @@ public class UserRoleCheckInterceptor extends HandlerInterceptorAdapter {
 		if(handler instanceof HandlerMethod ){
 			HandlerMethod method = (HandlerMethod)handler;
 			UserRole userRole = method.getMethodAnnotation(UserRole.class);
-			String[] roles = userRole.value();
-			if(roles!=null && roles.length>0){
-				User user = (User)request.getAttribute("currentUser");
-				if(user==null){
-					throw new UnAuthorizedException("权限不足,需要先进行登录");
-				}
-				String userType = user.getUserType();
-				if(StringUtils.isBlank(userType)){
-					throw new UnAuthorizedException("未被授予角色");
-				}
-				boolean authorized = false;
-				for(String role : roles){
-					if(StringUtils.equals(role, userType)){
-						authorized = true;
-						break;
+			if(userRole!=null){
+				String[] roles = userRole.value();
+				if(roles!=null && roles.length>0){
+					User user = (User)request.getAttribute("currentUser");
+					if(user==null){
+						throw new UnAuthorizedException("权限不足,需要先进行登录");
 					}
-				}
-				
-				if(!authorized){
-					throw new UnAuthorizedException("权限不足");
+					String userType = user.getUserType();
+					if(StringUtils.isBlank(userType)){
+						throw new UnAuthorizedException("未被授予角色");
+					}
+					boolean authorized = false;
+					for(String role : roles){
+						if(StringUtils.equals(role, userType)){
+							authorized = true;
+							break;
+						}
+					}
+					
+					if(!authorized){
+						throw new UnAuthorizedException("权限不足");
+					}
 				}
 			}
 		}
