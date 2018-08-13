@@ -12,12 +12,14 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import cn.cnplay.demo.model.User;
 import cn.cnplay.demo.model.UserHandleLog;
 import cn.cnplay.demo.service.UserHandleLogService;
+import cn.cnplay.demo.service.UserService;
 import cn.cnplay.demo.utils.IpUtil;
 import cn.cnplay.demo.vo.ResultVo;
 
 public class UserHandleLogInterceptor  extends HandlerInterceptorAdapter  {
 	
 	@Autowired UserHandleLogService logService;
+	@Autowired UserService userService;
 	
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
@@ -37,7 +39,6 @@ public class UserHandleLogInterceptor  extends HandlerInterceptorAdapter  {
 				String uri = request.getRequestURI();
 				UserHandleLog handleLog = new UserHandleLog();
 				User user = (User)request.getAttribute("currentUser");
-				
 				if(user!=null){
 					if(StringUtils.isBlank(user.getName())){
 						handleLog.setUserNo(user.getUsername());
@@ -45,6 +46,14 @@ public class UserHandleLogInterceptor  extends HandlerInterceptorAdapter  {
 						handleLog.setUser(user);
 					}
 				}
+				
+				String auditor = request.getHeader("auditor");
+				if(StringUtils.isNotBlank(auditor)){
+					User user2 = new User();
+					user2.setId(auditor);
+					handleLog.setAuditor(user2);
+				}
+				
 				handleLog.setRequestUri(uri);
 				handleLog.setRequestDesc(buffer.toString());
 				handleLog.setClientIp(IpUtil.getIpAddr(request));

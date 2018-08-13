@@ -21,14 +21,14 @@ public class ControllerExceptionHandler {
 	@ExceptionHandler(UnAuthorizedException.class)
 	@ResponseStatus(HttpStatus.FORBIDDEN)
 	public ResultVo<?> handleUnAuthorizedException(UnAuthorizedException e){
-		LOG.warn("无权限",e);
+		LOG.warn("无权限",e.getMessage());
 		return ResultVOUtil.error(e.getMessage());
 	}
 	
 	@ExceptionHandler(UnLoginException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	public ResultVo<?> handleUnLoginExceptionn(UnLoginException e){
-		LOG.warn("未登录或已过期",e);
+		LOG.warn("未登录或已过期",e.getMessage());
 		return ResultVOUtil.error(e.getMessage());
 	}
 	

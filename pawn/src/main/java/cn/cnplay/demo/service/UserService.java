@@ -16,8 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import cn.cnplay.demo.model.Department;
 import cn.cnplay.demo.model.User;
+import cn.cnplay.demo.model.UserTokenLog;
 import cn.cnplay.demo.repository.DepartmentRepository;
 import cn.cnplay.demo.repository.UserRepository;
+import cn.cnplay.demo.repository.UserTokenLogRepository;
 import cn.cnplay.demo.utils.ResultVOUtil;
 import cn.cnplay.demo.utils.Sha1Util;
 import cn.cnplay.demo.vo.ResultVo;
@@ -33,6 +35,16 @@ public class UserService {
 	@Autowired DepartmentRepository deptRepository;
 	
 	@Autowired EntityManager entityManager;
+	
+	@Autowired  UserTokenLogRepository tokenLogRepository;
+	
+	public ResultVo<?> get(String id){
+		User user = userRepository.findOne(id);
+		if(user==null){
+			return ResultVOUtil.error("用户不存在");
+		}
+		return ResultVOUtil.success(user);
+	}
 	
 	@Transactional
 	public ResultVo<?> add(User user){
@@ -122,6 +134,24 @@ public class UserService {
 			}else{
 				return ResultVOUtil.error("原密码错误");
 			}
+		}
+	}
+	
+	@Transactional
+	public ResultVo<?> updatePswd(String userId){
+		User user = userRepository.findOne(userId);
+		if(user==null){
+			return ResultVOUtil.error("用户不存在");
+		}else{
+			byte[] salt = Sha1Util.generateSalt();
+			String password = Hex.encodeHexString(salt)+ Hex.encodeHexString(Sha1Util.encrypt(DEFAULT_PSWD.getBytes(), salt));
+			user.setPassword(password);
+			userRepository.save(user);
+			UserTokenLog tokenLog = tokenLogRepository.getUserToken(userId);
+			if(tokenLog!=null){
+				tokenLogRepository.delete(tokenLog);
+			}
+			return ResultVOUtil.success();
 		}
 	}
 	

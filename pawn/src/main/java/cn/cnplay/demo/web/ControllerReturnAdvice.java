@@ -14,6 +14,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 import cn.cnplay.demo.vo.ResultVo;
 
 @ControllerAdvice
+
 public class ControllerReturnAdvice implements ResponseBodyAdvice<ResultVo<?>> {
 	
 	@Autowired

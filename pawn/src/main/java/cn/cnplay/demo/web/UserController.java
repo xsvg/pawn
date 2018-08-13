@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Description;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,11 +28,15 @@ public class UserController
 	
 	@Autowired UserService userService;
 	
+	@RequestMapping("{id}")
+	public ResultVo<?> get(@PathVariable String id){
+		return userService.get(id);
+	}
 	
 	@RequestMapping(value="add",method=RequestMethod.POST)
 	@Description("添加")
 	@UserRole("admin")
-	public ResultVo<?> add(User user){
+	public ResultVo<?> add(User user,HttpServletRequest request){
 		ResultVo<?> resultVo = userService.add(user);
 		resultVo.setData(null);
 		return resultVo;
@@ -45,11 +49,18 @@ public class UserController
 		return userService.update(user);
 	}
 	
-	@RequestMapping(value="delete",method=RequestMethod.POST)
+	@RequestMapping(value="delete/{id}",method=RequestMethod.POST)
 	@Description("删除")
 	@UserRole("admin")
-	public ResultVo<?> delete(String id){
+	public ResultVo<?> delete(@PathVariable String id){
 		return userService.delete(id);
+	}
+	
+	@RequestMapping(value="/pswd/{id}",method=RequestMethod.POST)
+	@Description("重置密码")
+	@UserRole("admin")
+	public ResultVo<?> resetPswd(@PathVariable String id){
+		return userService.updatePswd(id);
 	}
 	
 	@RequestMapping(value="pswd",method=RequestMethod.POST)

@@ -19,6 +19,12 @@ public class StorageAreaController {
 	
 	@Autowired StorageAreaService areaService;
 	
+	
+	@RequestMapping("{id}")
+	public ResultVo<?> get(@PathVariable String id){
+		return areaService.get(id);
+	}
+	
 	@PostMapping("add")
 	@UserRole("admin")
 	@Description("添加")

@@ -45,4 +45,10 @@ public class HomeController
 	public ResultVo<?> currentUser(HttpServletRequest request){
 		return ResultVOUtil.success(request.getAttribute("currentUser"));
 	}
+	
+	@RequestMapping("audit")
+	public ResultVo<?> audit(User user,HttpServletRequest request){
+		User loginUser = (User)request.getAttribute("currentUser");
+		return homeService.audit(loginUser, user);
+	}
 }

@@ -25,6 +25,16 @@ public class StorageAreaService {
 	@Autowired EntityManager entityManager;
 	@Autowired DepartmentRepository deptRepository;
 	
+	
+	public ResultVo<?> get(String id){
+		StorageArea area = areaRepository.findOne(id);
+		if(area==null){
+			return ResultVOUtil.error("区域信息不存在");
+		}else{
+			return ResultVOUtil.success(area);
+		}
+	}
+	
 	public ResultVo<?> add(StorageArea area){
 		if(StringUtils.isBlank(area.getAreaName())){
 			return ResultVOUtil.error("区域名称不能为空");
@@ -101,7 +111,11 @@ public class StorageAreaService {
 		if(area==null){
 			return ResultVOUtil.error("区域不存在");
 		}
-		area.setDeleted(true);;
+		List<StorageArea> children = areaRepository.findChildren(id);
+		if(children.size()>0){
+			return ResultVOUtil.error("存在子级区域不能删除");
+		}
+		area.setDeleted(true);
 		areaRepository.save(area);
 		return ResultVOUtil.success();
 	}

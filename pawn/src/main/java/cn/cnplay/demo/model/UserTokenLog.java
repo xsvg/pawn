@@ -21,7 +21,7 @@ public class UserTokenLog extends BaseEntity {
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="user_id")
 	private User user;
-	@Column(name="jwt_token")
+	@Column(name="jwt_token",length=512)
 	private String jwtToken;
 	public User getUser() {
 		return user;

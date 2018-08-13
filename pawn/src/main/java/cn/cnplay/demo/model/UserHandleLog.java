@@ -24,6 +24,9 @@ public class UserHandleLog extends BaseEntity {
 	private User user;
 	@Column(name="user_no")
 	private String userNo;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="auditor_id")
+	private User auditor;
 	@Column(name="client_ip")
 	private String clientIp;
 	@Column(name="request_uri")
@@ -47,7 +50,12 @@ public class UserHandleLog extends BaseEntity {
 	public void setUserNo(String userNo) {
 		this.userNo = userNo;
 	}
-	
+	public User getAuditor() {
+		return auditor;
+	}
+	public void setAuditor(User auditor) {
+		this.auditor = auditor;
+	}
 	public String getClientIp() {
 		return clientIp;
 	}
