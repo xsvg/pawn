@@ -28,6 +28,10 @@ public class StorageArea extends BaseEntity {
 	@Column(name="deleted")
 	private Boolean deleted = false;
 	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="dept_id")
+	private Department department;
+	
 	public String getAreaNo() {
 		return areaNo;
 	}
@@ -57,6 +61,12 @@ public class StorageArea extends BaseEntity {
 	}
 	public void setDeleted(Boolean deleted) {
 		this.deleted = deleted;
+	}
+	public Department getDepartment() {
+		return department;
+	}
+	public void setDepartment(Department department) {
+		this.department = department;
 	}
 	
 	

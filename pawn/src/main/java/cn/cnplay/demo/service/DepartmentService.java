@@ -1,8 +1,11 @@
 package cn.cnplay.demo.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -124,5 +127,52 @@ public class DepartmentService {
 			getParents(dept.getParent().getId(), list);
 		}
 	}
+	
+
+	public ResultVo<?> listTree(String root,String excludes){
+		List<Department> departments = departmentRepository.findAll();
+		List<Map<String,Object>> list = new ArrayList<>();
+		for(Department dept:departments){
+			if(BooleanUtils.isTrue(dept.getDeleted())){
+				Map<String,Object> map = new HashMap<>();
+				List<Map<String,Object>> children = new ArrayList<>();
+				map.put("children", children);
+				map.put("id", dept.getId());
+				map.put("deptNo", dept.getDeptNo());
+				map.put("deptName", dept.getDeptName());
+				map.put("deptType", dept.getDeptType());
+				if(dept.getParent()!=null&&StringUtils.isNotBlank(dept.getParent().getId())){
+					map.put("pid", dept.getParent().getId());
+				}
+				if(BooleanUtils.isTrue(dept.getDeleted())){
+					continue;
+				}
+				if(StringUtils.equals(dept.getId(), excludes)){
+					continue;
+				}
+				list.add(map);
+			}
+		}
+		List<Map<String,Object>> tree = new ArrayList<>();
+		for(Map<String,Object> map:list){
+			List<Map<String,Object>> children = (List<Map<String,Object>>)map.get("children");
+			String id = (String)map.get("id");
+			String pid = (String)map.get("pid");
+			if(StringUtils.isNotBlank(root)&&StringUtils.equals(root, id)){
+				tree.add(map);
+			}else if(StringUtils.isBlank(pid)){
+				tree.add(map);
+			}
+			for(Map<String,Object> map2:list){
+				String id2 = (String)map.get("id");
+				pid = (String)map2.get("pid");
+				if(StringUtils.equals(id2, pid)){
+					children.add(map2);
+				}
+			}
+		}
+		return ResultVOUtil.success(tree);
+	}
+	
 	
 }

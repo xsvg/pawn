@@ -7,6 +7,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
@@ -21,6 +22,7 @@ public class User extends BaseEntity
 	private String username;
 	private String name;
 	private String address;
+	@JsonIgnore
 	private String password;
 	@Column(name="user_type")
 	private String userType; // admin:管理员,auditor:审批人员,operator:经办人员,:storeman:保管员

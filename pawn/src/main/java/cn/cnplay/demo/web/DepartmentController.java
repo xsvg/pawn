@@ -45,4 +45,9 @@ public class DepartmentController {
 	public ResultVo<?> delete(String id){
 		return deptService.delete(id);
 	}
+	
+	@PostMapping("tree")
+	public ResultVo<?> listTree(String root,String exclude){
+		return deptService.listTree(root,exclude);
+	}
 }
