@@ -133,7 +133,7 @@ public class DepartmentService {
 		List<Department> departments = departmentRepository.findAll();
 		List<Map<String,Object>> list = new ArrayList<>();
 		for(Department dept:departments){
-			if(BooleanUtils.isTrue(dept.getDeleted())){
+			if(!BooleanUtils.isTrue(dept.getDeleted())){
 				Map<String,Object> map = new HashMap<>();
 				List<Map<String,Object>> children = new ArrayList<>();
 				map.put("children", children);
