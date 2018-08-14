@@ -9,6 +9,7 @@ public class ResultVOUtil<T> {
         ResultVo.setData(data);
         ResultVo.setCode(0);
         ResultVo.setMsg("成功");
+        ResultVo.setSuccess(true);
         return ResultVo;
     }
 
