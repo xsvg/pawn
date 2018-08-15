@@ -14,9 +14,9 @@ public class ItemRecord extends BaseEntity {
 	private static final long serialVersionUID = 1L;
 	
 	@Column(name="record_desc")
-	private String recordDesc;	//记录描述
+	private String recordDesc;	//记录描述 入库、出库、转移灯
 	@Column(name="ref_record_id")
-	private String refRecordId; //关联记录ID
+	private String refRecordId; //关联出入库记录ID
 	public String getRecordDesc() {
 		return recordDesc;
 	}
