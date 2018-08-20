@@ -18,6 +18,12 @@ public class StorageOut extends BaseEntity {
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="item_id")
+	private StorageItem item;
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="department_id")
+	private Department department;
 	@Column(name="confirm_id")
 	private Boolean confirmId; //身份证原件确认
 	@Column(name="take_Back_Certificate")
@@ -37,6 +43,21 @@ public class StorageOut extends BaseEntity {
 	private Boolean auditResult; //审批结果
 	@Column(name="audit_date")
 	private Date autidDate;	//审批时间
+	
+	
+	
+	public StorageItem getItem() {
+		return item;
+	}
+	public void setItem(StorageItem item) {
+		this.item = item;
+	}
+	public Department getDepartment() {
+		return department;
+	}
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
 	public Boolean getConfirmId() {
 		return confirmId;
 	}
